@@ -15,6 +15,7 @@ import { useSession } from 'next-auth/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AcceptMessageSchema } from '@/schemas/acceptMessageSchema';
+import Searchbar from '@/components/Searchbar';
 
 function UserDashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -189,6 +190,9 @@ function UserDashboard() {
         ) : (
           <p>No messages to display.</p>
         )}
+      </div>
+      <div className='fixed top-36 left-5'>
+        <Searchbar/>
       </div>
     </div>
   );
