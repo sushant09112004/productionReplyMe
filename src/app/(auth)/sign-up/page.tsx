@@ -69,7 +69,7 @@ export default function SignUpForm() {
     setIsSubmitting(true);
     try {
       const response = await axios.post<ApiResponse>('/api/sign-up', data);
-
+      
       toast({
         title: 'Success',
         description: response.data.message,
@@ -95,6 +95,9 @@ export default function SignUpForm() {
 
       setIsSubmitting(false);
     }
+    // trying the new block
+
+
   };
 
   return (

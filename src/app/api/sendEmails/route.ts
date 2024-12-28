@@ -1,39 +1,43 @@
-import nodemailer from 'nodemailer';
-import VerificationEmail from "../../../../emails/VerificationEmail";
 import { ApiResponse } from '@/types/ApiResponse';
-import { renderToStaticMarkup } from 'react-dom/server';
+import { NextResponse } from 'next/server';
+import nodemailer from 'nodemailer';
 
-export async function sendVerificationEmail(
-  email: string,
-  username: string,
-  verifyCode: string
-): Promise<ApiResponse> {
+export async function POST(request: Request) {
   try {
-    // Create a Nodemailer transporter
+    const { email, username, verifyCode } = await request.json();
+
+    // Validate inputs
+    if (!email || !username || !verifyCode) {
+      return NextResponse.json({ message: 'All fields are required' }, { status: 400 });
+    }
+
+    // Nodemailer setup
     const transporter = nodemailer.createTransport({
-      service: 'gmail', // Change to your email service provider if needed
+      service: 'gmail', // Example: Gmail service
       auth: {
         user: process.env.EMAIL_USER, // Your email address
-        pass: process.env.EMAIL_PASS, // Your email app password
+        pass: process.env.EMAIL_PASS, // Your email password (or App Password)
       },
     });
 
-    // Render the React component to HTML
-    const emailContent = renderToStaticMarkup(
-      VerificationEmail({ username, otp: verifyCode })
-    );
+    // Email content
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Your Verification Code',
+      html: `
+        <h1>Hello, ${username}!</h1>
+        <p>Your verification code is: <strong>${verifyCode}</strong></p>
+        <p>Please use this code to complete your signup.</p>
+      `,
+    };
 
     // Send the email
-    await transporter.sendMail({
-      from: `"Mystery Message" <${process.env.EMAIL_USER}>`, // Sender address
-      to: email, // Recipient email
-      subject: 'Mystery Message Verification Code', // Email subject
-      html: emailContent, // HTML email content
-    });
+    await transporter.sendMail(mailOptions);
 
-    return { success: true, message: 'Verification email sent successfully.' };
-  } catch (emailError: any) {
-    console.error('Error sending verification email:', emailError);
-    return { success: false, message: 'Failed to send verification email.' };
+    return NextResponse.json({ message: 'Email sent successfully!' }, { status: 200 });
+  } catch (error: any) {
+    console.error('Error sending email:', error);
+    return NextResponse.json({ message: 'Failed to send email', error: error.message }, { status: 500 });
   }
 }
