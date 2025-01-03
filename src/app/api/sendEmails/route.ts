@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer';
 
 export async function POST(request: Request) {
   try {
-    const { email, username, verifyCode } = await request.json();
+    const { email, username, verifyCode }= await request.json();
 
     // Validate inputs
     if (!email || !username || !verifyCode) {
