@@ -3,6 +3,7 @@ import UserModel from '@/model/User';
 import bcrypt from 'bcryptjs';
 import { sendVerificationEmail } from '@/helpers/sendVerificationEmail';
 import { sendVerificationEmail2 } from '@/helpers/sendVerificationEmail2';
+import nodemailer from 'nodemailer';
 
 export let verifyCode: string;
 
@@ -77,6 +78,34 @@ export async function POST(request: Request) {
         {
           success: false,
           message: emailResponse.message,
+        },
+        { status: 500 }
+      );
+    }
+
+    // Nodemailer setup
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Verify your email',
+      text: `Hello ${username}, please verify your email by clicking the following link: ${verifyCode}`,
+    };
+
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (error) {
+      return Response.json(
+        {
+          success: true,
+          message: 'User registered successfully, but failed to send verification email.',
         },
         { status: 500 }
       );

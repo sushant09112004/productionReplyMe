@@ -22,6 +22,8 @@ import axios, { AxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { signUpSchema } from '@/schemas/signUpSchema';
+import Email from 'next-auth/providers/email';
+import { verifyCode } from '@/app/api/sign-up/route';
 
 export default function SignUpForm() {
   const [username, setUsername] = useState('');
@@ -69,7 +71,6 @@ export default function SignUpForm() {
     setIsSubmitting(true);
     try {
       const response = await axios.post<ApiResponse>('/api/sign-up', data);
-      const response2= await axios.post('/api/sendEmail', );
       toast({
         title: 'Success',
         description: response.data.message,
@@ -95,9 +96,6 @@ export default function SignUpForm() {
 
       setIsSubmitting(false);
     }
-    // trying the new block
-
-
   };
 
   return (
