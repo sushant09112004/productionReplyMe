@@ -96,7 +96,7 @@ export async function POST(request: Request) {
       from: process.env.EMAIL_USER,
       to: email,
       subject: 'Verify your email',
-      text: `Hello ${username}, please verify your email by clicking the following link: ${verifyCode}`,
+      text: `Hello ${username}, Thank You For Registering For ReplyMe to complete the registration process please enter the One Time Password : ${verifyCode}`,
     };
 
     try {
