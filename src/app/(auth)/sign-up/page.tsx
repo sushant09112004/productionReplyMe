@@ -69,7 +69,7 @@ export default function SignUpForm() {
     setIsSubmitting(true);
     try {
       const response = await axios.post<ApiResponse>('/api/sign-up', data);
-      
+      const response2= await axios.post('/api/sendEmail', );
       toast({
         title: 'Success',
         description: response.data.message,

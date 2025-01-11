@@ -1,10 +1,11 @@
 import { ApiResponse } from '@/types/ApiResponse';
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { verifyCode } from '@/app/api/sign-up/route';
 
 export async function POST(request: Request) {
   try {
-    const { email, username, verifyCode } = await request.json();
+    const { email, username } = await request.json();
 
     // Validate inputs
     if (!email || !username || !verifyCode) {
