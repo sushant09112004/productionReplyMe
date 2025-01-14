@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { Button } from './ui/button';
 import { User } from 'next-auth';
-
+  import SearchBar from './Searchbar';
 function Navbar() {
-  const { data: session } = useSession();
+  const { data: session } = useSession();     
   const user : User = session?.user;
 
   return (
@@ -16,6 +16,7 @@ function Navbar() {
         <a href="#" className="text-xl font-bold mb-4 md:mb-0">
           True Feedback
         </a>
+        <SearchBar />
         {session ? (
           <>
             <span className="mr-4">
