@@ -1,28 +1,32 @@
-import { useState, useEffect, ChangeEvent } from 'react';
-import { IoMenuOutline } from 'react-icons/io5';  // Importing IoMenuOutline for the menu button
-import { RxCross2 } from 'react-icons/rx';  // Importing RxCross2 for the close button
+import { useState, useEffect, ChangeEvent } from "react";
+import { useSession, signOut } from "next-auth/react";
+import { User } from "next-auth";
+
+import { IoMenuOutline } from "react-icons/io5"; // Importing IoMenuOutline for the menu button
+import { RxCross2 } from "react-icons/rx"; // Importing RxCross2 for the close button
+
 
 const SearchBar: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [usernames, setUsernames] = useState<string[]>([]);
   const [filteredUsernames, setFilteredUsernames] = useState<string[]>([]);
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);  // State to handle sidebar visibility
-
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false); // State to handle sidebar visibility
+  //Lofi for the signin and signout in 
   // Fetch all usernames from the backend
   useEffect(() => {
     const fetchUsernames = async () => {
       try {
-        const response = await fetch('/api/users');
+        const response = await fetch("/api/users");
         const data = await response.json();
 
         if (data.success) {
           setUsernames(data.users || []); // Ensure the users array is available
           setFilteredUsernames(data.users || []); // Initially show all usernames
         } else {
-          console.error('Error fetching usernames:', data.message);
+          console.error("Error fetching usernames:", data.message);
         }
       } catch (error) {
-        console.error('Error fetching usernames:', error);
+        console.error("Error fetching usernames:", error);
       }
     };
 
@@ -47,7 +51,7 @@ const SearchBar: React.FC = () => {
 
   // Navigate to the user's page using window.location
   const handleUsernameClick = (username: string) => {
-    window.location.href = `/u/${username}`;  // Redirects to the user profile page
+    window.location.href = `/u/${username}`; // Redirects to the user profile page
   };
 
   return (
@@ -55,9 +59,9 @@ const SearchBar: React.FC = () => {
       {/* Menu Button for opening sidebar */}
       <div
         onClick={toggleSidebar}
-        className="mb-4 p-2 cursor-pointer bg-blue-500 text-white text-xl rounded"
+        className="mb-4 p-2 cursor-pointer bg-black text-white text-xl rounded fixed top-5 left-4"
       >
-        <button>U may know?</button>
+        <IoMenuOutline />
       </div>
 
       {/* Sidebar with search input */}
@@ -70,7 +74,7 @@ const SearchBar: React.FC = () => {
           >
             <RxCross2 />
           </div>
-          
+
           <input
             type="text"
             value={searchQuery}
@@ -84,7 +88,7 @@ const SearchBar: React.FC = () => {
                 <li
                   key={index}
                   className="py-1 cursor-pointer hover:text-blue-500"
-                  onClick={() => handleUsernameClick(username)}  // Trigger redirection on click
+                  onClick={() => handleUsernameClick(username)} // Trigger redirection on click
                 >
                   {username}
                 </li>

@@ -92,9 +92,6 @@ export default function SignInForm() {
               )}
             />
             <Button className='w-full' type="submit">Sign In</Button>
-            <Link href="/forgotpasword">
-            <p className='text-blue-600 text-right text-sm mt-3'>Forgot Password?</p>
-            </Link>
           </form>
         </Form>
         <div className="text-center mt-4">

@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'ReplyMe',
-  description: 'Real feedback from real people.',
+  description: 'Real feedback from Real people.',
 };
 
 interface RootLayoutProps {
